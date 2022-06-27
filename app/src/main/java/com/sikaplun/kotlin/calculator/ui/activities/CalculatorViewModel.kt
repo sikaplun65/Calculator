@@ -7,13 +7,15 @@ import androidx.lifecycle.ViewModel
 import com.sikaplun.kotlin.calculator.CalculatorAction
 import com.sikaplun.kotlin.calculator.CalculatorOperation
 import com.sikaplun.kotlin.calculator.CalculatorState
+import com.sikaplun.kotlin.calculator.CalculatorStateMemory
 
 class CalculatorViewModel : ViewModel() {
 
     var state by mutableStateOf(CalculatorState())
         private set
 
-    private var numberFromMemory = "0"
+    var stateMemory by mutableStateOf(CalculatorStateMemory())
+        private set
 
     private var isNumberChange = true
 
@@ -27,17 +29,16 @@ class CalculatorViewModel : ViewModel() {
             is CalculatorAction.Calculate -> performCalculation()
             is CalculatorAction.Delete -> performDeletion()
             is CalculatorAction.NumberInversion -> inversionPositiveDigitToNegativeDigitAndViceVersa()
-            is CalculatorAction.MemoryClear -> numberFromMemory = "0"
+            is CalculatorAction.MemoryClear -> clearMemory()
             is CalculatorAction.MemoryShow -> showNumberFromMemory()
             is CalculatorAction.MemoryAddition -> addToNumberFromMemory()
             is CalculatorAction.MemorySubtract -> subtractFromNumberInMemory()
-            is CalculatorAction.BackgroundMR -> changeBackground()
             is CalculatorAction.PercentCalculate -> performPercentCalculation()
         }
     }
 
-    private fun changeBackground() {
-        //Todo
+    private fun clearMemory() {
+        stateMemory = CalculatorStateMemory()
     }
 
     private fun subtractFromNumberInMemory() {
@@ -46,8 +47,8 @@ class CalculatorViewModel : ViewModel() {
         if (state.secondOperand.isNotEmpty()) {
             performCalculation()
         }
-        val num = getNumberFromString(numberFromMemory) - getNumberFromString(state.firstOperand)
-        numberFromMemory = convertNumberToString(num)
+        val num = getNumberFromString(stateMemory.digit) - getNumberFromString(state.firstOperand)
+        stateMemory = stateMemory.copy(digit = convertNumberToString(num))
 
     }
 
@@ -58,8 +59,8 @@ class CalculatorViewModel : ViewModel() {
             performCalculation()
         }
 
-        val num = getNumberFromString(numberFromMemory) + getNumberFromString(state.firstOperand)
-        numberFromMemory = convertNumberToString(num)
+        val num = getNumberFromString(stateMemory.digit) + getNumberFromString(state.firstOperand)
+        stateMemory = stateMemory.copy(digit = convertNumberToString(num))
 
     }
 
@@ -67,15 +68,15 @@ class CalculatorViewModel : ViewModel() {
 
         if (state.firstOperand.isEmpty()) {
             state = state.copy(
-                firstOperand = numberFromMemory
+                firstOperand = stateMemory.digit
             )
         } else if (state.firstOperand.isNotEmpty() && state.operation == null) {
             state = state.copy(
-                firstOperand = numberFromMemory
+                firstOperand = stateMemory.digit
             )
         } else if (state.secondOperand.isEmpty()) {
             state = state.copy(
-                secondOperand = numberFromMemory
+                secondOperand = stateMemory.digit
             )
         }
     }

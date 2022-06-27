@@ -13,6 +13,4 @@ sealed class CalculatorAction{
     object MemoryClear: CalculatorAction()
     object MemoryShow: CalculatorAction()
     object PercentCalculate: CalculatorAction()
-    object BackgroundMR: CalculatorAction()
-
 }

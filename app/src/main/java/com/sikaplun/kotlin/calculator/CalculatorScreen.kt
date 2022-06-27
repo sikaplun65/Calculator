@@ -18,24 +18,22 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sikaplun.kotlin.calculator.models.CalculatorButton
 import com.sikaplun.kotlin.calculator.models.CalculatorButtonMemory
-import com.sikaplun.kotlin.calculator.ui.theme.*
+import com.sikaplun.kotlin.calculator.ui.theme.DarkRed
+import com.sikaplun.kotlin.calculator.ui.theme.LightRed
 import com.sikaplun.kotlin.calculator.util.ButtonModifiers.equalsButtonModifier
 import com.sikaplun.kotlin.calculator.util.ButtonModifiers.memoryButtonModifier
-import com.sikaplun.kotlin.calculator.util.ButtonModifiers.operationButtonModifier
 import com.sikaplun.kotlin.calculator.util.ButtonModifiers.numberButtonModifier
-
-var backgroundMR = MediumGray
+import com.sikaplun.kotlin.calculator.util.ButtonModifiers.operationButtonModifier
 
 @Composable
 fun CalculatorScreen(
     state: CalculatorState,
+    stateMemory: CalculatorStateMemory,
     modifier: Modifier = Modifier,
     onAction: (CalculatorAction) -> Unit,
 ) {
     val buttonSpacing: Dp = 8.dp
     val weight = 1F
-    var brush = Brush.verticalGradient(colors = listOf(LightGray, MediumGray))
-
 
     Box(modifier = modifier) {
         Column(modifier = Modifier
@@ -50,18 +48,36 @@ fun CalculatorScreen(
                     .fillMaxWidth()
                     .weight(1f),
                 content = {
-                    Text(
-                        text = state.firstOperand + (state.operation?.symbol
-                            ?: "") + state.secondOperand,
-                        textAlign = TextAlign.End,
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .background(Color.Black),
-                        fontWeight = FontWeight.Light,
-                        fontSize = 50.sp,
-                        color = Color.White,
-                        maxLines = 2
-                    )
+                    Column(modifier = Modifier
+                        .fillMaxWidth())
+                    {
+                        Text(
+                            text = if(stateMemory.digit=="0") "" else " mr: " + stateMemory.digit,
+                            textAlign = TextAlign.Start,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .weight(0.3f)
+                                .background(Color.Black),
+                            fontWeight = FontWeight.Medium,
+                            fontSize = 20.sp,
+                            color = Color.Gray,
+                            maxLines = 1
+                        )
+
+                        Text(
+                            text = state.firstOperand + (state.operation?.symbol
+                                ?: "") + state.secondOperand,
+                            textAlign = TextAlign.End,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .weight(1.7f)
+                                .background(Color.Black),
+                            fontWeight = FontWeight.Light,
+                            fontSize = 50.sp,
+                            color = Color.White,
+                            maxLines = 2
+                        )
+                    }
                 }
             )
 
@@ -100,10 +116,7 @@ fun CalculatorScreen(
 
                 CalculatorButtonMemory(
                     symbol = "mr",
-                    modifier = Modifier
-                        .background(brush = brush)
-                        .border(1.dp, Color.White, shape = RoundedCornerShape(30.dp))
-                        .aspectRatio(ratio = 2.1F)
+                    modifier = memoryButtonModifier
                         .weight(weight = weight),
                     onClick = {
                         onAction(CalculatorAction.MemoryShow)
@@ -117,10 +130,8 @@ fun CalculatorScreen(
             ) {
                 CalculatorButton(
                     symbol = "AC",
-                    modifier = Modifier
+                    modifier = operationButtonModifier
                         .background(Brush.verticalGradient(colors = listOf(LightRed, DarkRed)))
-                        .border(1.dp, Color.White, shape = RoundedCornerShape(30.dp))
-                        .aspectRatio(ratio = 1.4F)
                         .weight(weight = weight),
                     onClick = {
                         onAction(CalculatorAction.Clear)
