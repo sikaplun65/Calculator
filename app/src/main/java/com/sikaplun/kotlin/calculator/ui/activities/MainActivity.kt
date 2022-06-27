@@ -20,8 +20,10 @@ class MainActivity : ComponentActivity() {
             CalculatorTheme {
                 val viewModel = viewModel<CalculatorViewModel>()
                 val state = viewModel.state
+                val stateMemory = viewModel.stateMemory
                 CalculatorScreen(
                     state = state,
+                    stateMemory = stateMemory,
                     onAction = viewModel::onAction,
                     modifier = Modifier
                         .fillMaxSize()
