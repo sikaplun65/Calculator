@@ -106,6 +106,12 @@ class CalculatorViewModel : ViewModel() {
 
         if (state.firstOperand.isNotEmpty() && state.operation != null) {
 
+            if (state.firstOperand.contains("%")){
+                state.firstOperand = state.firstOperand.dropLast(1)
+                val n = getNumberFromString(state.firstOperand)/100
+                state.firstOperand = convertNumberToString(n)
+            }
+
             val firstOperand = getNumberFromString(state.firstOperand)
             var secondOperand = getNumberFromString(state.firstOperand)
 
@@ -136,13 +142,13 @@ class CalculatorViewModel : ViewModel() {
 
         if (state.firstOperand.isEmpty()) return
 
-        val num = getNumberFromString(state.firstOperand)
-
-        if (state.operation == null && state.secondOperand.isEmpty()) {
+        if (state.operation == null && state.firstOperand.isNotEmpty() && !state.firstOperand.contains("%")) {
             state = state.copy(
-                firstOperand = convertNumberToString(num / 100)
+                firstOperand = state.firstOperand + "%",
             )
-        }else if (state.secondOperand.isNotEmpty()){
+            state.operation = CalculatorOperation.Multiply
+
+        }else if (state.secondOperand.isNotEmpty() && !state.firstOperand.contains("%")){
             state = state.copy(
                 secondOperand = state.secondOperand + "%"
             )
@@ -189,13 +195,7 @@ class CalculatorViewModel : ViewModel() {
     private fun enterNumber(number: Int) {
         if (isNumberChange) {
             if (state.operation == null) {
-                if (state.firstOperand.length >= MAX_NUM_LENGTH) {
-                    return
-                }
-                if (state.firstOperand == "0") {
-                    state = state.copy(
-                        firstOperand = number.toString()
-                    )
+                if (state.firstOperand.length >= MAX_NUM_LENGTH || state.firstOperand.contains("%")) {
                     return
                 }
                 state = state.copy(
@@ -203,13 +203,8 @@ class CalculatorViewModel : ViewModel() {
                 )
                 return
             }
-            if (state.secondOperand.length >= MAX_NUM_LENGTH) {
-                return
-            }
-            if (state.secondOperand == "0") {
-                state = state.copy(
-                    secondOperand = number.toString()
-                )
+
+            if (state.secondOperand.length >= MAX_NUM_LENGTH || state.secondOperand.contains("%")) {
                 return
             }
             state = state.copy(
