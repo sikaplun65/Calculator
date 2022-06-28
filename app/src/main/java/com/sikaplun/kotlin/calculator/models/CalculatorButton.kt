@@ -54,4 +54,23 @@ fun CalculatorButtonMemory(
     }
 }
 
-
+@Composable
+fun CalculatorButtonLand(
+    symbol: String,
+    modifier: Modifier,
+    onClick: () -> Unit,
+) {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier
+            .clip(CircleShape)
+            .clickable { onClick() }
+            .then(modifier)
+    ) {
+        Text(
+            text = symbol,
+            fontSize = 16.sp,
+            color = Color.White
+        )
+    }
+}

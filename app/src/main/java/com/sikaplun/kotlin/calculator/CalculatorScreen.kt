@@ -52,7 +52,7 @@ fun CalculatorScreen(
                         .fillMaxWidth())
                     {
                         Text(
-                            text = if(stateMemory.digit=="0") "" else " mr: " + stateMemory.digit,
+                            text = if(stateMemory.digit == "0") "" else " mr: " + stateMemory.digit,
                             textAlign = TextAlign.Start,
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -66,7 +66,7 @@ fun CalculatorScreen(
 
                         Text(
                             text = state.firstOperand + (state.operation?.symbol
-                                ?: "") + state.secondOperand,
+                                ?: "") + state.secondOperand + " ",
                             textAlign = TextAlign.End,
                             modifier = Modifier
                                 .fillMaxWidth()
