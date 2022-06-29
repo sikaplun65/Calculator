@@ -104,23 +104,22 @@ class CalculatorViewModel : ViewModel() {
 
     private fun performCalculation() {
 
-        if (state.firstOperand.isNotEmpty() && state.operation != null) {
+        if (state.firstOperand.isNotEmpty() && state.operation != null && state.secondOperand.isNotEmpty()) {
 
-            if (state.firstOperand.contains("%")){
+            val firstOperand = if (state.firstOperand.contains("%")) {
                 state.firstOperand = state.firstOperand.dropLast(1)
-                val n = getNumberFromString(state.firstOperand)/100
-                state.firstOperand = convertNumberToString(n)
+                getNumberFromString(state.firstOperand) / 100
+            } else {
+                getNumberFromString(state.firstOperand)
             }
 
-            val firstOperand = getNumberFromString(state.firstOperand)
-            var secondOperand = getNumberFromString(state.firstOperand)
-
-            if (state.secondOperand.isNotEmpty() && state.secondOperand.contains("%")){
-                performDeletion()
-                secondOperand = getNumberFromString(state.secondOperand)*(firstOperand/100)
-            } else if(state.secondOperand.isNotEmpty()) {
-                secondOperand = getNumberFromString(state.secondOperand)
-            }
+            val secondOperand =
+                if (state.secondOperand.contains("%")) {
+                    performDeletion()
+                    getNumberFromString(state.secondOperand) * (firstOperand / 100)
+                } else {
+                    getNumberFromString(state.secondOperand)
+                }
 
             val result = when (state.operation) {
                 is CalculatorOperation.Addition -> firstOperand + secondOperand
@@ -157,7 +156,6 @@ class CalculatorViewModel : ViewModel() {
     }
 
     private fun enterOperation(operation: CalculatorOperation) {
-
         performCalculation()
 
         if (state.firstOperand.isNotBlank()) {

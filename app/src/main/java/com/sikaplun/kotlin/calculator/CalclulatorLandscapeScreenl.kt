@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
@@ -183,7 +184,7 @@ fun CalculatorLandscapeScreen(
                     modifier = textButtonModifier
                         .weight(weight = weight)
                 ) {
-
+                    Text(text = "(", fontSize = 10.sp)
                 }
 
                 TextButton(
@@ -191,7 +192,7 @@ fun CalculatorLandscapeScreen(
                     modifier = textButtonModifier
                         .weight(weight = weight)
                 ) {
-
+                    Text(text = ")", fontSize = 10.sp)
                 }
 
                 TextButton(
@@ -199,7 +200,7 @@ fun CalculatorLandscapeScreen(
                     modifier = textButtonModifier
                         .weight(weight = weight)
                 ) {
-
+                    Text(text = "√", fontSize = 14.sp)
                 }
 
                 TextButton(
@@ -207,7 +208,7 @@ fun CalculatorLandscapeScreen(
                     modifier = textButtonModifier
                         .weight(weight = weight)
                 ) {
-
+                    Text(text = "^", fontSize = 14.sp)
                 }
 
                 CalculatorButtonLand(
@@ -258,7 +259,7 @@ fun CalculatorLandscapeScreen(
                     modifier = textButtonModifier
                         .weight(weight = weight)
                 ) {
-
+                    Text(text = "sin", fontSize = 10.sp)
                 }
 
                 TextButton(
@@ -266,7 +267,7 @@ fun CalculatorLandscapeScreen(
                     modifier = textButtonModifier
                         .weight(weight = weight)
                 ) {
-
+                    Text(text = "cos", fontSize = 10.sp)
                 }
 
                 TextButton(
@@ -274,7 +275,7 @@ fun CalculatorLandscapeScreen(
                     modifier = textButtonModifier
                         .weight(weight = weight)
                 ) {
-
+                    Text(text = "tan", fontSize = 10.sp)
                 }
 
                 TextButton(
@@ -282,7 +283,7 @@ fun CalculatorLandscapeScreen(
                     modifier = textButtonModifier
                         .weight(weight = weight)
                 ) {
-
+                    Text(text = "log", fontSize = 10.sp)
                 }
 
                 CalculatorButtonLand(
@@ -333,7 +334,7 @@ fun CalculatorLandscapeScreen(
                     modifier = textButtonModifier
                         .weight(weight = weight)
                 ) {
-
+                    Text(text = "π", fontSize = 10.sp)
                 }
 
                 TextButton(
@@ -341,7 +342,7 @@ fun CalculatorLandscapeScreen(
                     modifier = textButtonModifier
                         .weight(weight = weight)
                 ) {
-
+                    Text(text = "!", fontSize = 10.sp)
                 }
 
                 TextButton(
@@ -349,7 +350,7 @@ fun CalculatorLandscapeScreen(
                     modifier = textButtonModifier
                         .weight(weight = weight)
                 ) {
-
+                    Text(text = "e", fontSize = 10.sp)
                 }
 
                 TextButton(
@@ -357,7 +358,7 @@ fun CalculatorLandscapeScreen(
                     modifier = textButtonModifier
                         .weight(weight = weight)
                 ) {
-
+                    Text(text = "1/x", fontSize = 10.sp)
                 }
 
                 CalculatorButtonLand(
@@ -408,7 +409,7 @@ fun CalculatorLandscapeScreen(
                     modifier = textButtonModifier
                         .weight(weight = weight)
                 ) {
-
+                    Text(text = "Rad", fontSize = 10.sp)
                 }
 
                 TextButton(
@@ -416,7 +417,7 @@ fun CalculatorLandscapeScreen(
                     modifier = textButtonModifier
                         .weight(weight = weight)
                 ) {
-
+                    Text(text = "in", fontSize = 10.sp)
                 }
 
                 TextButton(
@@ -424,7 +425,7 @@ fun CalculatorLandscapeScreen(
                     modifier = textButtonModifier
                         .weight(weight = weight)
                 ) {
-
+                    Text(text = "EE", fontSize = 10.sp)
                 }
 
                 TextButton(
@@ -432,7 +433,7 @@ fun CalculatorLandscapeScreen(
                     modifier = textButtonModifier
                         .weight(weight = weight)
                 ) {
-
+                    Text(text = "Rand", fontSize = 10.sp)
                 }
 
                 CalculatorButtonLand(
