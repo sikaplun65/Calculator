@@ -89,22 +89,32 @@ class CalculatorViewModel : ViewModel() {
     private fun performDeletion() {
         if (isNumberChange) {
             when {
-                state.secondOperand.isNotBlank() -> state = state.copy(
-                    secondOperand = state.secondOperand.dropLast(1)
-                )
+                state.secondOperand.isNotBlank() -> {
+                    val str = state.secondOperand.dropLast(1)
+
+                    state = state.copy(secondOperand = if (str.isEmpty()) str else{
+                        val digit = getNumberFromString(str)
+                        convertNumberToString(digit)
+                    })
+                }
                 state.operation != null -> state = state.copy(
                     operation = null
                 )
-                state.firstOperand.isNotBlank() -> state = state.copy(
-                    firstOperand = state.firstOperand.dropLast(1)
-                )
+                state.firstOperand.isNotBlank() -> {
+                    val str = state.firstOperand.dropLast(1)
+
+                    state = state.copy(firstOperand = if (str.isEmpty()) str else{
+                        val digit = getNumberFromString(str)
+                        convertNumberToString(digit)
+                    })
+                }
             }
         }
     }
 
     private fun performCalculation() {
 
-        if (state.firstOperand.isNotEmpty() && state.operation != null && state.secondOperand.isNotEmpty()) {
+        if (state.firstOperand.isNotEmpty() && state.operation != null && state.secondOperand.isNotEmpty() && state.secondOperand != "-") {
 
             val firstOperand = if (state.firstOperand.contains("%")) {
                 state.firstOperand = state.firstOperand.dropLast(1)
@@ -156,11 +166,39 @@ class CalculatorViewModel : ViewModel() {
     }
 
     private fun enterOperation(operation: CalculatorOperation) {
+
         performCalculation()
 
-        if (state.firstOperand.isNotBlank()) {
-            state = state.copy(operation = operation)
+        if (state.firstOperand.isEmpty() && operation == CalculatorOperation.Subtract) {
+            state = state.copy(firstOperand = "-")
+            return
+        }
 
+
+        if (state.firstOperand.isNotBlank() && state.firstOperand != "-") {
+            if (state.operation == CalculatorOperation.Subtract && operation == CalculatorOperation.Subtract) {
+                state = state.copy(
+                    operation = CalculatorOperation.Addition
+                )
+                return
+            } else if (state.operation == CalculatorOperation.Addition && operation == CalculatorOperation.Subtract) {
+                state = state.copy(
+                    operation = CalculatorOperation.Subtract
+                )
+                return
+            } else if (state.operation == CalculatorOperation.Addition && operation == CalculatorOperation.Addition) {
+                return
+            } else if (state.operation == CalculatorOperation.Multiply && operation == CalculatorOperation.Multiply) {
+                return
+            } else if (state.operation == CalculatorOperation.Divide && operation == CalculatorOperation.Divide) {
+                return
+            } else if (state.operation == CalculatorOperation.Multiply && operation == CalculatorOperation.Subtract) {
+                state = state.copy(secondOperand = "-")
+            } else if (state.operation == CalculatorOperation.Divide && operation == CalculatorOperation.Subtract) {
+                state = state.copy(secondOperand = "-")
+            }
+            if (state.operation != null) return
+            state = state.copy(operation = operation)
             isNumberChange = true
         }
     }
@@ -196,8 +234,9 @@ class CalculatorViewModel : ViewModel() {
                 if (state.firstOperand.length >= MAX_NUM_LENGTH || state.firstOperand.contains("%")) {
                     return
                 }
+
                 state = state.copy(
-                    firstOperand = state.firstOperand + number
+                    firstOperand = digitGrouping(state.firstOperand + number)
                 )
                 return
             }
@@ -206,7 +245,7 @@ class CalculatorViewModel : ViewModel() {
                 return
             }
             state = state.copy(
-                secondOperand = state.secondOperand + number
+                secondOperand = digitGrouping(state.secondOperand + number)
             )
         }
     }
@@ -252,12 +291,62 @@ class CalculatorViewModel : ViewModel() {
     }
 
     private fun getNumberFromString(str: String): Double {
-        return str.replace(",", ".", true).toDouble()
+        val tempStr = str.replace("\\s".toRegex(), "")
+        return tempStr.replace(",", ".").toDouble()
     }
 
     private fun convertNumberToString(digit: Double): String {
-        return if (digit - digit.toInt() == 0.0) digit.toInt().toString()
-        else digit.toString().take(7).replace(".", ",", true)
+
+        var str = digit.toString()
+        val pointPosition = str.indexOf(".")
+
+        if ((pointPosition-3) > 0) {
+
+            str = str.substring(0, pointPosition - 3) + " " + str.substring(pointPosition - 3)
+
+            for (i in 0..pointPosition / 3) {
+                val lastSpacePosition = str.indexOf(" ")
+                if ((lastSpacePosition - 3) > 0) {
+                    str = str.substring(0, lastSpacePosition - 3) + " " + str.substring(
+                        lastSpacePosition - 3)
+                } else {
+                    break
+                }
+            }
+        }
+
+        return if (digit - digit.toInt() == 0.0 ){
+            str.substringBefore(".")
+        }else{
+            str.replace(".", ",")
+        }
+    }
+
+
+    private fun digitGrouping(str: String): String {
+        var tmp = ""
+
+        if (str.length > 3 && !str.contains(",")) {
+            tmp = if (!str.contains(" ")) {
+                str.substring(0, str.length - 3) + " " + str.substring(str.length - 3)
+            }else{
+                tmp = str.replace("\\s".toRegex(), "")
+                tmp.substring(0, tmp.length - 3) + " " + tmp.substring(tmp.length - 3)
+            }
+
+            for (i in 0..tmp.length / 3) {
+                val lastSpacePosition = tmp.indexOf(" ")
+                if ((lastSpacePosition - 3) > 0) {
+                    tmp = tmp.substring(0, lastSpacePosition - 3) + " " + tmp.substring(
+                        lastSpacePosition - 3)
+                } else {
+                    break
+                }
+            }
+            return tmp
+        } else {
+            return str
+        }
     }
 
 
@@ -265,6 +354,8 @@ class CalculatorViewModel : ViewModel() {
 
 
     companion object {
-        private const val MAX_NUM_LENGTH = 9
+        private const val MAX_NUM_LENGTH = 40
     }
+
+
 }

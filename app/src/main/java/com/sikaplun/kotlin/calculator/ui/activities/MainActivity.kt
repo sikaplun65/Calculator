@@ -11,8 +11,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.sikaplun.kotlin.calculator.CalculatorLandscapeScreen
-import com.sikaplun.kotlin.calculator.CalculatorScreen
+import com.sikaplun.kotlin.calculator.ui.screens.CalculatorLandscapeScreen
+import com.sikaplun.kotlin.calculator.ui.screens.CalculatorScreen
+import com.sikaplun.kotlin.calculator.ui.screens.LandscapeScreen
 import com.sikaplun.kotlin.calculator.ui.theme.CalculatorTheme
 import com.sikaplun.kotlin.calculator.ui.theme.MediumGray
 
@@ -29,7 +30,7 @@ class MainActivity : ComponentActivity() {
 
                 when (configuration.orientation) {
                     Configuration.ORIENTATION_LANDSCAPE -> {
-                        CalculatorLandscapeScreen(
+                        LandscapeScreen(
                             state = state,
                             stateMemory = stateMemory,
                             onAction = viewModel::onAction,
