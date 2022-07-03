@@ -28,6 +28,9 @@ import com.sikaplun.kotlin.calculator.util.ButtonModifiers.equalsButtonModifier
 import com.sikaplun.kotlin.calculator.util.ButtonModifiers.memoryButtonModifier
 import com.sikaplun.kotlin.calculator.util.ButtonModifiers.numberButtonModifier
 import com.sikaplun.kotlin.calculator.util.ButtonModifiers.operationButtonModifier
+import com.sikaplun.kotlin.calculator.util.Constans
+import com.sikaplun.kotlin.calculator.util.Constans.Companion.FONT_SIZE_MEMORY_PORTRAIT
+import com.sikaplun.kotlin.calculator.util.Constans.Companion.FONT_SIZE_NUMBERS_PORTRAIT
 
 @Composable
 fun CalculatorScreen(
@@ -63,7 +66,7 @@ fun CalculatorScreen(
                                 .weight(0.3f)
                                 .background(Color.Black),
                             fontWeight = FontWeight.Medium,
-                            fontSize = 20.sp,
+                            fontSize = FONT_SIZE_MEMORY_PORTRAIT,
                             color = Color.Gray,
                             maxLines = 1
                         )
@@ -77,7 +80,7 @@ fun CalculatorScreen(
                                 .weight(1.7f)
                                 .background(Color.Black),
                             fontWeight = FontWeight.Light,
-                            fontSize = 50.sp,
+                            fontSize = FONT_SIZE_NUMBERS_PORTRAIT,
                             color = Color.White,
                             maxLines = 2
                         )

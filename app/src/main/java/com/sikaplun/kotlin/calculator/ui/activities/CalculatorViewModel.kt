@@ -92,9 +92,10 @@ class CalculatorViewModel : ViewModel() {
                 state.secondOperand.isNotBlank() -> {
                     val str = state.secondOperand.dropLast(1)
 
-                    state = state.copy(secondOperand = if (str.isEmpty()) str else{
-                        val digit = getNumberFromString(str)
-                        convertNumberToString(digit)
+                    state = state.copy(secondOperand = if (str.isEmpty() || !str.contains(" ")){
+                        str
+                    }else{
+                        groupingCharactersAfterDeletion(str)
                     })
                 }
                 state.operation != null -> state = state.copy(
@@ -103,9 +104,10 @@ class CalculatorViewModel : ViewModel() {
                 state.firstOperand.isNotBlank() -> {
                     val str = state.firstOperand.dropLast(1)
 
-                    state = state.copy(firstOperand = if (str.isEmpty()) str else{
-                        val digit = getNumberFromString(str)
-                        convertNumberToString(digit)
+                    state = state.copy(firstOperand = if (str.isEmpty() || !str.contains(" ")){
+                        str
+                    } else{
+                        groupingCharactersAfterDeletion(str)
                     })
                 }
             }
@@ -236,7 +238,7 @@ class CalculatorViewModel : ViewModel() {
                 }
 
                 state = state.copy(
-                    firstOperand = digitGrouping(state.firstOperand + number)
+                    firstOperand = groupingCharactersAfterAdding(state.firstOperand + number)
                 )
                 return
             }
@@ -245,11 +247,10 @@ class CalculatorViewModel : ViewModel() {
                 return
             }
             state = state.copy(
-                secondOperand = digitGrouping(state.secondOperand + number)
+                secondOperand = groupingCharactersAfterAdding(state.secondOperand + number)
             )
         }
     }
-
 
     private fun inversionPositiveDigitToNegativeDigitAndViceVersa() {
 
@@ -322,40 +323,79 @@ class CalculatorViewModel : ViewModel() {
         }
     }
 
-
-    private fun digitGrouping(str: String): String {
-        var tmp = ""
+    private fun groupingCharactersAfterAdding(str: String): String {
+        var tmpStr = ""
 
         if (str.length > 3 && !str.contains(",")) {
-            tmp = if (!str.contains(" ")) {
+            tmpStr = if (!str.contains(" ")) {
                 str.substring(0, str.length - 3) + " " + str.substring(str.length - 3)
-            }else{
-                tmp = str.replace("\\s".toRegex(), "")
-                tmp.substring(0, tmp.length - 3) + " " + tmp.substring(tmp.length - 3)
+            } else {
+                tmpStr = str.replace("\\s".toRegex(), "")
+                tmpStr.substring(0, tmpStr.length - 3) + " " + tmpStr.substring(tmpStr.length - 3)
             }
 
-            for (i in 0..tmp.length / 3) {
-                val lastSpacePosition = tmp.indexOf(" ")
+            for (i in 0..tmpStr.length / 3) {
+                val lastSpacePosition = tmpStr.indexOf(" ")
                 if ((lastSpacePosition - 3) > 0) {
-                    tmp = tmp.substring(0, lastSpacePosition - 3) + " " + tmp.substring(
+                    tmpStr = tmpStr.substring(0, lastSpacePosition - 3) + " " + tmpStr.substring(
                         lastSpacePosition - 3)
                 } else {
                     break
                 }
             }
-            return tmp
+            return tmpStr
         } else {
+            return str
+        }
+
+//        return if (str.length > 3 && !str.contains(",")) {
+//            tmpStr = if (!str.contains(" ")) {
+//                str.substring(0, str.length - 3) + " " + str.substring(str.length - 3)
+//            }else ({
+//                val lastSpacePosition = tmpStr.indexOf(" ")
+//                if ((lastSpacePosition - 3) > 0){
+//                    tmpStr = tmpStr.substring(0, lastSpacePosition - 3) + " " + tmpStr.substring(
+//                        lastSpacePosition - 3)
+//                }
+//            }).toString()
+//
+//            tmpStr
+//        } else {
+//            str
+//        }
+    }
+
+    private fun groupingCharactersAfterDeletion(str: String): String{
+        var tmpStr = ""
+        if (!str.contains(",")){
+            if ((str.length - 3) > 0){
+                tmpStr = str.replace("\\s".toRegex(),"")
+                if (tmpStr.length <= 3){
+                    return tmpStr
+                }
+                tmpStr = tmpStr.substring(0, tmpStr.length - 3) + " " + tmpStr.substring(tmpStr.length - 3)
+
+                for (i in 0..tmpStr.length / 3) {
+                    val lastSpacePosition = tmpStr.indexOf(" ")
+                    if ((lastSpacePosition - 3) > 0) {
+                        tmpStr =
+                            tmpStr.substring(0, lastSpacePosition - 3) + " " + tmpStr.substring(
+                                lastSpacePosition - 3)
+                    } else {
+                        break
+                    }
+                }
+            }
+            return tmpStr
+        }else{
             return str
         }
     }
 
-
     private fun isNegative(operand: String): Boolean = operand.toDouble() < 0
-
 
     companion object {
         private const val MAX_NUM_LENGTH = 40
     }
-
 
 }
