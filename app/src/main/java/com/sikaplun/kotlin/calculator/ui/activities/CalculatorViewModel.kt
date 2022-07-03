@@ -3,11 +3,13 @@ package com.sikaplun.kotlin.calculator.ui.activities
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
 import com.sikaplun.kotlin.calculator.CalculatorAction
 import com.sikaplun.kotlin.calculator.CalculatorOperation
 import com.sikaplun.kotlin.calculator.CalculatorState
 import com.sikaplun.kotlin.calculator.CalculatorStateMemory
+import com.sikaplun.kotlin.calculator.util.Constans
 
 class CalculatorViewModel : ViewModel() {
 
@@ -116,6 +118,8 @@ class CalculatorViewModel : ViewModel() {
 
     private fun performCalculation() {
 
+        if (state.firstOperand.contains("%"))state = state.copy(operation = CalculatorOperation.Multiply)
+
         if (state.firstOperand.isNotEmpty() && state.operation != null && state.secondOperand.isNotEmpty() && state.secondOperand != "-") {
 
             val firstOperand = if (state.firstOperand.contains("%")) {
@@ -157,14 +161,12 @@ class CalculatorViewModel : ViewModel() {
             state = state.copy(
                 firstOperand = state.firstOperand + "%",
             )
-            state.operation = CalculatorOperation.Multiply
 
         }else if (state.secondOperand.isNotEmpty() && !state.firstOperand.contains("%")){
             state = state.copy(
                 secondOperand = state.secondOperand + "%"
             )
         }
-
     }
 
     private fun enterOperation(operation: CalculatorOperation) {
@@ -233,7 +235,11 @@ class CalculatorViewModel : ViewModel() {
     private fun enterNumber(number: Int) {
         if (isNumberChange) {
             if (state.operation == null) {
-                if (state.firstOperand.length >= MAX_NUM_LENGTH || state.firstOperand.contains("%")) {
+
+                if (state.firstOperand.contains("%")) {
+                    state = state.copy(
+                        secondOperand = groupingCharactersAfterAdding(state.secondOperand + number)
+                    )
                     return
                 }
 
@@ -243,7 +249,7 @@ class CalculatorViewModel : ViewModel() {
                 return
             }
 
-            if (state.secondOperand.length >= MAX_NUM_LENGTH || state.secondOperand.contains("%")) {
+            if (state.secondOperand.contains("%")) {
                 return
             }
             state = state.copy(
