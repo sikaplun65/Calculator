@@ -314,8 +314,13 @@ class CalculatorViewModel : ViewModel() {
 
     private fun convertNumberToString(digit: Double): String {
 
-        var str = digit.toString()
-        val pointPosition = str.indexOf(".")
+        var str = if (digit - digit.toInt() == 0.0){
+            String.format("%d",digit.toInt())
+        }else{
+            String.format("%s",digit)
+        }
+
+        val pointPosition = if (str.contains(".")) str.indexOf(".") else str.length
 
         if ((pointPosition-3) > 0) {
 
@@ -332,11 +337,8 @@ class CalculatorViewModel : ViewModel() {
             }
         }
 
-        return if (digit - digit.toInt() == 0.0 ){
-            str.substringBefore(".")
-        }else{
-            str.replace(".", ",")
-        }
+        return if (str.contains(".")) str.replace(".",",")
+        else str
     }
 
     private fun groupingCharactersAfterAdding(str: String): String {
