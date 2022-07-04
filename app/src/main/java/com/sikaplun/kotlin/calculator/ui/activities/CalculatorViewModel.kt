@@ -3,13 +3,11 @@ package com.sikaplun.kotlin.calculator.ui.activities
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
 import com.sikaplun.kotlin.calculator.CalculatorAction
 import com.sikaplun.kotlin.calculator.CalculatorOperation
 import com.sikaplun.kotlin.calculator.CalculatorState
 import com.sikaplun.kotlin.calculator.CalculatorStateMemory
-import com.sikaplun.kotlin.calculator.util.Constans
 
 class CalculatorViewModel : ViewModel() {
 
@@ -20,7 +18,6 @@ class CalculatorViewModel : ViewModel() {
         private set
 
     private var isNumberChange = true
-
 
     fun onAction(action: CalculatorAction) {
         when (action) {
@@ -35,7 +32,7 @@ class CalculatorViewModel : ViewModel() {
             is CalculatorAction.MemoryShow -> showNumberFromMemory()
             is CalculatorAction.MemoryAddition -> addToNumberFromMemory()
             is CalculatorAction.MemorySubtract -> subtractFromNumberInMemory()
-            is CalculatorAction.PercentCalculate -> performPercentCalculation()
+            is CalculatorAction.PercentCalculate -> addPercentageSymbolToNumber()
         }
     }
 
@@ -153,7 +150,7 @@ class CalculatorViewModel : ViewModel() {
         }
     }
 
-    private fun performPercentCalculation() {
+    private fun addPercentageSymbolToNumber() {
 
         if (state.firstOperand.isEmpty()) return
 
@@ -178,6 +175,13 @@ class CalculatorViewModel : ViewModel() {
             return
         }
 
+        if (state.firstOperand.contains("%") && !state.secondOperand.contains("-")){
+            state = state.copy(operation = null, secondOperand = "-")
+            return
+        } else if (state.firstOperand.contains("%")){
+            state = state.copy(operation = null)
+            return
+        }
 
         if (state.firstOperand.isNotBlank() && state.firstOperand != "-") {
             if (state.operation == CalculatorOperation.Subtract && operation == CalculatorOperation.Subtract) {
@@ -287,7 +291,13 @@ class CalculatorViewModel : ViewModel() {
                 }
             }
         } else {
-            if (state.firstOperand.isEmpty()) {
+            if (state.firstOperand.isEmpty() || state.firstOperand == "-") {
+                return
+            } else if (state.firstOperand.contains("%")){
+                state = state.copy(
+                    operation = null,
+                    secondOperand = convertNumberToString(-getNumberFromString(state.secondOperand))
+                )
                 return
             }
 
@@ -353,22 +363,6 @@ class CalculatorViewModel : ViewModel() {
         } else {
             return str
         }
-
-//        return if (str.length > 3 && !str.contains(",")) {
-//            tmpStr = if (!str.contains(" ")) {
-//                str.substring(0, str.length - 3) + " " + str.substring(str.length - 3)
-//            }else ({
-//                val lastSpacePosition = tmpStr.indexOf(" ")
-//                if ((lastSpacePosition - 3) > 0){
-//                    tmpStr = tmpStr.substring(0, lastSpacePosition - 3) + " " + tmpStr.substring(
-//                        lastSpacePosition - 3)
-//                }
-//            }).toString()
-//
-//            tmpStr
-//        } else {
-//            str
-//        }
     }
 
     private fun groupingCharactersAfterDeletion(str: String): String{
@@ -399,9 +393,4 @@ class CalculatorViewModel : ViewModel() {
     }
 
     private fun isNegative(operand: String): Boolean = operand.toDouble() < 0
-
-    companion object {
-        private const val MAX_NUM_LENGTH = 40
-    }
-
 }
