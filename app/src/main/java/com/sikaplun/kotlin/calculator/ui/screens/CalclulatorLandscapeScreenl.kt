@@ -1,9 +1,8 @@
-package com.sikaplun.kotlin.calculator
+package com.sikaplun.kotlin.calculator.ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Text
@@ -11,7 +10,6 @@ import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -19,8 +17,18 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.sikaplun.kotlin.calculator.CalculatorAction
+import com.sikaplun.kotlin.calculator.CalculatorOperation
+import com.sikaplun.kotlin.calculator.CalculatorState
+import com.sikaplun.kotlin.calculator.CalculatorStateMemory
 import com.sikaplun.kotlin.calculator.models.CalculatorButtonLand
-import com.sikaplun.kotlin.calculator.ui.theme.*
+import com.sikaplun.kotlin.calculator.ui.theme.MediumBlue
+import com.sikaplun.kotlin.calculator.ui.theme.DarkRed
+import com.sikaplun.kotlin.calculator.ui.theme.LightBlue
+import com.sikaplun.kotlin.calculator.ui.theme.LightRed
+import com.sikaplun.kotlin.calculator.util.ButtonModifiers.numberButtonLandModifier
+import com.sikaplun.kotlin.calculator.util.ButtonModifiers.operationButtonLandModifier
+import com.sikaplun.kotlin.calculator.util.ButtonModifiers.textButtonLandModifier
 
 @Composable
 fun CalculatorLandscapeScreen(
@@ -30,25 +38,7 @@ fun CalculatorLandscapeScreen(
     onAction: (CalculatorAction) -> Unit,
 ) {
     val buttonSpacing: Dp = 4.dp
-
     val weight = 1F
-
-    val textButtonModifier = Modifier
-        .aspectRatio(2.2f)
-        .clip(CircleShape)
-        .border(1.dp, Color.White, shape = RoundedCornerShape(30.dp))
-
-    val numberButtonLandModifier = Modifier
-        .background(Brush.verticalGradient(colors = listOf(LightGray, MediumGray)))
-        .border(1.dp, Color.White, shape = RoundedCornerShape(30.dp))
-        .aspectRatio(ratio = 2.2f)
-
-    val operationButtonLandModifier = Modifier
-        .background(Brush.verticalGradient(colors = listOf(LightOrange, Orange)))
-        .border(1.dp, Color.White, shape = RoundedCornerShape(30.dp))
-        .aspectRatio(ratio = 2.2f)
-
-
 
     Box(modifier = modifier) {
         Column(modifier = Modifier
@@ -67,7 +57,7 @@ fun CalculatorLandscapeScreen(
                         .fillMaxWidth())
                     {
                         Text(
-                            text = if (stateMemory.digit == "0") "" else " mr: " + stateMemory.digit,
+                            text = if (stateMemory.digit == "0") "" else "  mr: " + stateMemory.digit,
                             textAlign = TextAlign.Start,
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -104,7 +94,7 @@ fun CalculatorLandscapeScreen(
                 TextButton(
 
                     onClick = { onAction(CalculatorAction.MemoryClear) },
-                    modifier = textButtonModifier
+                    modifier = textButtonLandModifier
                         .weight(weight = weight)
                 ) {
                     Text(text = "mc", fontSize = 10.sp)
@@ -112,7 +102,7 @@ fun CalculatorLandscapeScreen(
 
                 TextButton(
                     onClick = { onAction(CalculatorAction.MemoryAddition) },
-                    modifier = textButtonModifier
+                    modifier = textButtonLandModifier
                         .weight(weight = weight)
                 ) {
                     Text(text = "m+", fontSize = 10.sp)
@@ -120,7 +110,7 @@ fun CalculatorLandscapeScreen(
 
                 TextButton(
                     onClick = { onAction(CalculatorAction.MemorySubtract) },
-                    modifier = textButtonModifier
+                    modifier = textButtonLandModifier
                         .weight(weight = weight)
                 ) {
                     Text(text = "m−", fontSize = 10.sp)
@@ -128,7 +118,7 @@ fun CalculatorLandscapeScreen(
 
                 TextButton(
                     onClick = { onAction(CalculatorAction.MemoryShow) },
-                    modifier = textButtonModifier
+                    modifier = textButtonLandModifier
                         .weight(weight = weight)
                 ) {
                     Text(text = "mr", fontSize = 10.sp)
@@ -180,34 +170,34 @@ fun CalculatorLandscapeScreen(
             ) {
                 TextButton(
                     onClick = { /*TODO*/ },
-                    modifier = textButtonModifier
+                    modifier = textButtonLandModifier
                         .weight(weight = weight)
                 ) {
-
+                    Text(text = "(", fontSize = 10.sp)
                 }
 
                 TextButton(
                     onClick = { /*TODO*/ },
-                    modifier = textButtonModifier
+                    modifier = textButtonLandModifier
                         .weight(weight = weight)
                 ) {
-
+                    Text(text = ")", fontSize = 10.sp)
                 }
 
                 TextButton(
                     onClick = { /*TODO*/ },
-                    modifier = textButtonModifier
+                    modifier = textButtonLandModifier
                         .weight(weight = weight)
                 ) {
-
+                    Text(text = "√", fontSize = 14.sp)
                 }
 
                 TextButton(
                     onClick = { /*TODO*/ },
-                    modifier = textButtonModifier
+                    modifier = textButtonLandModifier
                         .weight(weight = weight)
                 ) {
-
+                    Text(text = "^", fontSize = 14.sp)
                 }
 
                 CalculatorButtonLand(
@@ -255,34 +245,34 @@ fun CalculatorLandscapeScreen(
             ) {
                 TextButton(
                     onClick = { /*TODO*/ },
-                    modifier = textButtonModifier
+                    modifier = textButtonLandModifier
                         .weight(weight = weight)
                 ) {
-
+                    Text(text = "sin", fontSize = 10.sp)
                 }
 
                 TextButton(
                     onClick = { /*TODO*/ },
-                    modifier = textButtonModifier
+                    modifier = textButtonLandModifier
                         .weight(weight = weight)
                 ) {
-
+                    Text(text = "cos", fontSize = 10.sp)
                 }
 
                 TextButton(
                     onClick = { /*TODO*/ },
-                    modifier = textButtonModifier
+                    modifier = textButtonLandModifier
                         .weight(weight = weight)
                 ) {
-
+                    Text(text = "tan", fontSize = 10.sp)
                 }
 
                 TextButton(
                     onClick = { /*TODO*/ },
-                    modifier = textButtonModifier
+                    modifier = textButtonLandModifier
                         .weight(weight = weight)
                 ) {
-
+                    Text(text = "log", fontSize = 10.sp)
                 }
 
                 CalculatorButtonLand(
@@ -330,34 +320,34 @@ fun CalculatorLandscapeScreen(
             ) {
                 TextButton(
                     onClick = { /*TODO*/ },
-                    modifier = textButtonModifier
+                    modifier = textButtonLandModifier
                         .weight(weight = weight)
                 ) {
-
+                    Text(text = "π", fontSize = 10.sp)
                 }
 
                 TextButton(
                     onClick = { /*TODO*/ },
-                    modifier = textButtonModifier
+                    modifier = textButtonLandModifier
                         .weight(weight = weight)
                 ) {
-
+                    Text(text = "!", fontSize = 10.sp)
                 }
 
                 TextButton(
                     onClick = { /*TODO*/ },
-                    modifier = textButtonModifier
+                    modifier = textButtonLandModifier
                         .weight(weight = weight)
                 ) {
-
+                    Text(text = "e", fontSize = 10.sp)
                 }
 
                 TextButton(
                     onClick = { /*TODO*/ },
-                    modifier = textButtonModifier
+                    modifier = textButtonLandModifier
                         .weight(weight = weight)
                 ) {
-
+                    Text(text = "1/x", fontSize = 10.sp)
                 }
 
                 CalculatorButtonLand(
@@ -405,34 +395,34 @@ fun CalculatorLandscapeScreen(
             ) {
                 TextButton(
                     onClick = { /*TODO*/ },
-                    modifier = textButtonModifier
+                    modifier = textButtonLandModifier
                         .weight(weight = weight)
                 ) {
-
+                    Text(text = "Rad", fontSize = 10.sp)
                 }
 
                 TextButton(
                     onClick = { /*TODO*/ },
-                    modifier = textButtonModifier
+                    modifier = textButtonLandModifier
                         .weight(weight = weight)
                 ) {
-
+                    Text(text = "ln", fontSize = 10.sp)
                 }
 
                 TextButton(
                     onClick = { /*TODO*/ },
-                    modifier = textButtonModifier
+                    modifier = textButtonLandModifier
                         .weight(weight = weight)
                 ) {
-
+                    Text(text = "EE", fontSize = 10.sp)
                 }
 
                 TextButton(
                     onClick = { /*TODO*/ },
-                    modifier = textButtonModifier
+                    modifier = textButtonLandModifier
                         .weight(weight = weight)
                 ) {
-
+                    Text(text = "Rand", fontSize = 10.sp)
                 }
 
                 CalculatorButtonLand(
@@ -466,7 +456,7 @@ fun CalculatorLandscapeScreen(
                     symbol = "=",
                     modifier = operationButtonLandModifier
                         .weight(weight = weight)
-                        .background(Brush.verticalGradient(colors = listOf(LightBlue, Blue))),
+                        .background(Brush.verticalGradient(colors = listOf(LightBlue, MediumBlue))),
                     onClick = {
                         onAction(CalculatorAction.Calculate)
                     }

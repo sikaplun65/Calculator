@@ -1,4 +1,4 @@
-package com.sikaplun.kotlin.calculator
+package com.sikaplun.kotlin.calculator.ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -16,6 +16,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.sikaplun.kotlin.calculator.CalculatorAction
+import com.sikaplun.kotlin.calculator.CalculatorOperation
+import com.sikaplun.kotlin.calculator.CalculatorState
+import com.sikaplun.kotlin.calculator.CalculatorStateMemory
 import com.sikaplun.kotlin.calculator.models.CalculatorButton
 import com.sikaplun.kotlin.calculator.models.CalculatorButtonMemory
 import com.sikaplun.kotlin.calculator.ui.theme.DarkRed
@@ -24,6 +28,9 @@ import com.sikaplun.kotlin.calculator.util.ButtonModifiers.equalsButtonModifier
 import com.sikaplun.kotlin.calculator.util.ButtonModifiers.memoryButtonModifier
 import com.sikaplun.kotlin.calculator.util.ButtonModifiers.numberButtonModifier
 import com.sikaplun.kotlin.calculator.util.ButtonModifiers.operationButtonModifier
+import com.sikaplun.kotlin.calculator.util.Constans
+import com.sikaplun.kotlin.calculator.util.Constans.Companion.FONT_SIZE_MEMORY_PORTRAIT
+import com.sikaplun.kotlin.calculator.util.Constans.Companion.FONT_SIZE_NUMBERS_PORTRAIT
 
 @Composable
 fun CalculatorScreen(
@@ -59,7 +66,7 @@ fun CalculatorScreen(
                                 .weight(0.3f)
                                 .background(Color.Black),
                             fontWeight = FontWeight.Medium,
-                            fontSize = 20.sp,
+                            fontSize = FONT_SIZE_MEMORY_PORTRAIT,
                             color = Color.Gray,
                             maxLines = 1
                         )
@@ -73,7 +80,7 @@ fun CalculatorScreen(
                                 .weight(1.7f)
                                 .background(Color.Black),
                             fontWeight = FontWeight.Light,
-                            fontSize = 50.sp,
+                            fontSize = FONT_SIZE_NUMBERS_PORTRAIT,
                             color = Color.White,
                             maxLines = 2
                         )
